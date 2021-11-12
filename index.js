@@ -85,7 +85,11 @@ app.put('/whitelisted/update/:address/:secret', (req, res) => {
         res.status(404).send("User does not exist")
         return
     }
-    result.reserve = req.body.reserve
+    if(members[index].reserve == 0){
+        res.status(404).send("User can't mint anymore")
+        return
+    }
+    result.reserve = members[index].reserve - 1;
     members[index] = result;
     const data = JSON.stringify(members);
     fs.writeFile('whitelisted.json', data, 'utf8', (err) =>{ if(err) console.log(err)});
